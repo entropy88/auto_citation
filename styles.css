@@ -1,0 +1,14 @@
+.book{
+    display: flex;
+    flex-direction: row;
+    background-color: blue;
+}
+
+.coverContainer{
+    padding: 0.5rem;
+}
+
+.biblio{
+    background-color: green;
+    flex-grow: 1;
+}
