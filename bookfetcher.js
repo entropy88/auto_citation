@@ -4,12 +4,14 @@ let result = document.getElementById("result");
 let biblio = document.getElementById('biblio');
 let cover = document.getElementById('coverImg');
 
+let isbn="";
+
 console.log(fetchBtn)
 console.log(inputField)
 
 
 fetchBtn.addEventListener('click', function () {
-    let isbn = inputField.value;
+   isbn = inputField.value;
     // fetchBook(isbn);
     fetchGoogleBookVolumeId(isbn);
 })
@@ -54,7 +56,7 @@ function fetchInfo(volumeId){
     return response.json()
   })
   .then(data => {  
-      let info=data.volumeInfo;  
+       let info=data.volumeInfo;  
         let bookInfo=Object.assign(info);
         visualise(bookInfo);  
 
@@ -64,13 +66,25 @@ function fetchInfo(volumeId){
 
 
 function visualise(bookInfo){
+  console.log(bookInfo)
+
+  //get image
+  let coverSrc=bookInfo.imageLinks.thumbnail;
 
     let title=bookInfo.title;
     let subtitle=bookInfo.subtitle;
     let authors=bookInfo.authors.join(", ");
-    let publisher=bookInfo.publisher;
-    let publishedDate=bookInfo.publishedDate;
+    let publisher=bookInfo.publisher;    
+
+    //get the year only
+    let rawDate=bookInfo.publishedDate;
+    let publishedDateArray=rawDate.match(/\d{4}/);
+    let publishedDate=publishedDateArray[0];
+
+
     let pages=bookInfo.pageCount;
+
+    cover.src=coverSrc;
 
     let authorsP=document.createElement('p');
     authorsP.innerText=authors;
@@ -81,10 +95,7 @@ function visualise(bookInfo){
     let subtitleP=document.createElement('p');
    subtitleP.textContent=subtitle;
 
-   let placeP=document.createElement('p');
-   placeP.innerText=";(";
-
-   let publisherP=document.createElement('p');
+    let publisherP=document.createElement('p');
    publisherP.textContent=publisher;
 
    let publishedP=document.createElement('p');
@@ -97,10 +108,14 @@ function visualise(bookInfo){
 
     biblio.appendChild(authorsP);
     biblio.appendChild(titleP);
-    biblio.appendChild(subtitleP);
-    biblio.appendChild(placeP);
+    biblio.appendChild(subtitleP);   
     biblio.appendChild(publisherP);
     biblio.appendChild(publishedP);
     biblio.appendChild(pagesP);
+
+    let record=`${authors}. ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
+    let recordP=document.createElement('p');
+    recordP.innerText=record;
+    result.appendChild(recordP)
 
 }
