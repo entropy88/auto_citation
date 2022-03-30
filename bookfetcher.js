@@ -80,7 +80,12 @@ coverSrc = bookInfo.imageLinks.thumbnail;
 
   let title = bookInfo.title;
   let subtitle = bookInfo.subtitle;
-  let authors = bookInfo.authors.join(", ");
+
+  //if there are authors
+  let authors="";
+  if(bookInfo.authors){
+  authors = bookInfo.authors.join(", ");
+  }
   let publisher = bookInfo.publisher;
 
   //get the year only
@@ -126,6 +131,7 @@ coverSrc = bookInfo.imageLinks.thumbnail;
 
   //invert authors and capitalize
   let recordAuthors = [];
+  if (bookInfo.authors){
   bookInfo.authors.forEach(a => {
     let authorNames = a.split(" ");
     let surname = authorNames[authorNames.length - 1].toUpperCase();
@@ -139,13 +145,19 @@ coverSrc = bookInfo.imageLinks.thumbnail;
 
     recordAuthors.push(invertedName);
   })
+}
+let authorsString="";
+//add . after authors if any
+if (recordAuthors.length>0){
+  authorsString=recordAuthors.join(", ")+"."
+}
 
   //add subtitle if any
   if (subtitle){
     title+=`: ${subtitle}`
   }
 
-  let record = `${recordAuthors.join(', ')}. ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
+  let record = `${authorsString} ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
   let recordP = document.createElement('p');
   recordP.innerText = record;
   result.appendChild(recordP)
