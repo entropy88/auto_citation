@@ -113,7 +113,26 @@ function visualise(bookInfo){
     biblio.appendChild(publishedP);
     biblio.appendChild(pagesP);
 
-    let record=`${authors}. ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
+    //invert authors and capitalize
+    let recordAuthors=[];
+    bookInfo.authors.forEach(a=>{
+      let authorNames=a.split(" ");
+      console.log(authorNames);
+      let surname=authorNames[authorNames.length-1].toUpperCase();
+      console.log(surname);
+      let invertedName=surname;
+      authorNames.pop();
+      console.log(authorNames);
+      invertedName+=`, ${authorNames.join(" ")}`;
+      //remove . if invertedName ends on it
+      if (invertedName.charAt(invertedName.length - 1) == '.') {
+        invertedName = invertedName.substr(0, invertedName.length - 1);
+      }
+
+      recordAuthors.push(invertedName);
+    })
+
+    let record=`${recordAuthors.join(', ')}. ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
     let recordP=document.createElement('p');
     recordP.innerText=record;
     result.appendChild(recordP)
