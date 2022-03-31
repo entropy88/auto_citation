@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
 body{
     margin: 2rem;
@@ -7,21 +6,27 @@ body{
 }
 
 button{
-   border-radius:100%;
-   padding: 1rem;
+    color:#617070;
+    
+    background-color: #c2dadd;  
+    border-radius: 0.5rem;
+    border:none;  
+    padding: 0.5rem;
+    font-weight: bold;
 }
 
 .searchBar{
     display: flex;
     flex-direction: row;
     padding: 0.5rem;
-    justify-content: space-around;
+    
 }
 
 .book{
     display: flex;
     flex-direction: row;
     border: 1px solid lightgrey;    
+    border-radius: 0.5rem;
 }
 
 .coverContainer{
@@ -42,6 +47,7 @@ button{
     color:rgb(49, 48, 48);
 }
 
+
 .info p{
     margin:10px;
 }
@@ -57,10 +63,7 @@ button{
 
 .addToBibliography{
 display: none;
+align-self: flex-end;
+font-size: 2rem;
 }
 
-i{
-    font-size: 18px;
-    background-color: red;
-    color:blue
-}
