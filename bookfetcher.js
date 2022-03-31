@@ -174,6 +174,7 @@ function visualise(bookInfo) {
   })
 
   function addToBibliography(recordObj) {
+    console.log(recordObj)
     //create record
   let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
  
@@ -181,12 +182,17 @@ function visualise(bookInfo) {
     bibliographyContainer.innerHTML="";
     //add record
     bibliography.push(record);
-    console.log(bibliography.length)
-    console.log("record pushed"+ record);
-    console.log(bibliography);
   
+    //remove duplicate records
+    let unique=[];
+    bibliography.forEach(r=>{
+      if(!unique.includes(r)){
+        unique.push(r)
+      }
+    })
+
     //sort records
-    let sorted=bibliography.sort(function(a,b){
+    let sorted=unique.sort(function(a,b){
       return a.localeCompare(b)
     });
     
