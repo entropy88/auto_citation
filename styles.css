@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
 body{
     margin: 2rem;
     font-family: 'Roboto', sans-serif;
+}
+
+button{
+   border-radius:100%;
+   padding: 1rem;
 }
 
 .searchBar{
@@ -47,4 +53,14 @@ body{
 
 .info_publishingDetails{
     font-size: 14px;
+}
+
+.addToBibliography{
+display: none;
+}
+
+i{
+    font-size: 18px;
+    background-color: red;
+    color:blue
 }

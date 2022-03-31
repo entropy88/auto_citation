@@ -1,13 +1,14 @@
 let fetchBtn = document.getElementById("fetchBtn");
 let inputField = document.getElementById("isbnInput");
 let result = document.getElementById("result");
-let biblio = document.getElementById('biblio');
+let infoContainer = document.getElementById('info');
 let cover = document.getElementById('coverImg');
+let addToBibliographyButton = document.getElementById('addToBibliography');
+let bibliographyContainer = document.getElementById('bibliographyContainer');
+
 
 let isbn = "";
-
-console.log(fetchBtn)
-console.log(inputField)
+let bibliography=[];
 
 
 fetchBtn.addEventListener('click', function () {
@@ -56,7 +57,7 @@ function fetchInfo(volumeId) {
     })
     .then(data => {
       console.log(data)
-      let isEbook=data.saleInfo.isEbook;
+      let isEbook = data.saleInfo.isEbook;
       console.log(isEbook)
       let info = data.volumeInfo;
       let bookInfo = Object.assign(info);
@@ -68,23 +69,23 @@ function fetchInfo(volumeId) {
 
 
 function visualise(bookInfo) {
- //clean container
- biblio.innerHTML="";
+  //clean container
+  infoContainer.innerHTML = "";
 
   //get image if there is one
-  let coverSrc="./no_cover.png";
-  if (bookInfo.imageLinks){
-coverSrc = bookInfo.imageLinks.thumbnail;
+  let coverSrc = "./no_cover.png";
+  if (bookInfo.imageLinks) {
+    coverSrc = bookInfo.imageLinks.thumbnail;
   }
- 
+
 
   let title = bookInfo.title;
   let subtitle = bookInfo.subtitle;
 
   //if there are authors
-  let authors="";
-  if(bookInfo.authors){
-  authors = bookInfo.authors.join(", ");
+  let authors = "";
+  if (bookInfo.authors) {
+    authors = bookInfo.authors.join(", ");
   }
   let publisher = bookInfo.publisher;
 
@@ -99,7 +100,7 @@ coverSrc = bookInfo.imageLinks.thumbnail;
   cover.src = coverSrc;
 
   let authorsP = document.createElement('p');
-  authorsP.className="info_authors";
+  authorsP.className = "info_authors";
   authorsP.innerText = authors;
 
   let titleP = document.createElement('p');
@@ -109,57 +110,90 @@ coverSrc = bookInfo.imageLinks.thumbnail;
   subtitleP.textContent = subtitle;
 
   let publisherP = document.createElement('p');
-  publisherP.className="info_publishingDetails";
+  publisherP.className = "info_publishingDetails";
   publisherP.textContent = publisher;
 
   let publishedP = document.createElement('p');
-  publishedP.className="info_publishingDetails";
+  publishedP.className = "info_publishingDetails";
   publishedP.textContent = publishedDate;
 
   let pagesP = document.createElement('p');
-  pagesP.className="info_publishingDetails";
+  pagesP.className = "info_publishingDetails";
   pagesP.textContent = pages + " с.";
 
 
-
-  biblio.appendChild(authorsP);
-  biblio.appendChild(titleP);
-  biblio.appendChild(subtitleP);
-  biblio.appendChild(publisherP);
-  biblio.appendChild(publishedP);
-  biblio.appendChild(pagesP);
+  //visualise info
+  infoContainer.appendChild(authorsP);
+  infoContainer.appendChild(titleP);
+  infoContainer.appendChild(subtitleP);
+  infoContainer.appendChild(publisherP);
+  infoContainer.appendChild(publishedP);
+  infoContainer.appendChild(pagesP);
 
   //invert authors and capitalize
   let recordAuthors = [];
-  if (bookInfo.authors){
-  bookInfo.authors.forEach(a => {
-    let authorNames = a.split(" ");
-    let surname = authorNames[authorNames.length - 1].toUpperCase();
-    let invertedName = surname;
-    authorNames.pop();
-    invertedName += `, ${authorNames.join(" ")}`;
-    //remove . if invertedName ends on it
-    if (invertedName.charAt(invertedName.length - 1) == '.') {
-      invertedName = invertedName.substr(0, invertedName.length - 1);
-    }
+  if (bookInfo.authors) {
+    bookInfo.authors.forEach(a => {
+      let authorNames = a.split(" ");
+      let surname = authorNames[authorNames.length - 1].toUpperCase();
+      let invertedName = surname;
+      authorNames.pop();
+      invertedName += `, ${authorNames.join(" ")}`;
+      //remove . if invertedName ends on it
+      if (invertedName.charAt(invertedName.length - 1) == '.') {
+        invertedName = invertedName.substr(0, invertedName.length - 1);
+      }
 
-    recordAuthors.push(invertedName);
-  })
-}
-let authorsString="";
-//add . after authors if any
-if (recordAuthors.length>0){
-  authorsString=recordAuthors.join(", ")+"."
-}
-
-  //add subtitle if any
-  if (subtitle){
-    title+=`: ${subtitle}`
+      recordAuthors.push(invertedName);
+    })
+  }
+  let authorsString = "";
+  //add . after authors if any
+  if (recordAuthors.length > 0) {
+    authorsString = recordAuthors.join(", ") + "."
   }
 
-  let record = `${authorsString} ${title}. ${publisher}, ${publishedDate}. ISBN ${isbn}`;
-  let recordP = document.createElement('p');
-  recordP.innerText = record;
-  result.appendChild(recordP)
+  //add subtitle if any
+  if (subtitle) {
+    title += `: ${subtitle}`
+  }
 
+  //create record object to pass to add to bibliography function
+  let recordObj={
+    authorsString,
+     title,
+     publisher,
+     publishedDate,
+     isbn
+  }
+  
+  //visualise button
+  addToBibliographyButton.style.display="block";
+  addToBibliographyButton.addEventListener('click', function () {
+    addToBibliography(recordObj);
+  })
+
+  function addToBibliography(recordObj) {
+    //create record
+  let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
+ 
+    //clear container
+    bibliographyContainer.innerHTML="";
+    //add record
+    bibliography.push(record);
+    console.log(bibliography.length)
+    console.log("record pushed"+ record);
+    console.log(bibliography);
+  
+    //sort records
+    let sorted=bibliography.sort(function(a,b){
+      return a.localeCompare(b)
+    });
+    
+   sorted.forEach(r=>{
+       let recordP = document.createElement('p');
+    recordP.innerText = r;
+    bibliographyContainer.appendChild(recordP)
+    }) 
+  }
 }
