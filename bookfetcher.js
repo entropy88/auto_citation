@@ -1,5 +1,7 @@
 let fetchBtn = document.getElementById("fetchBtn");
 let inputField = document.getElementById("isbnInput");
+let noBookFound=document.getElementById("noBookFound");
+console.log(noBookFound)
 let result = document.getElementById("result");
 let infoContainer = document.getElementById('info');
 let cover = document.getElementById('coverImg');
@@ -8,7 +10,7 @@ let bibliographyContainer = document.getElementById('bibliographyContainer');
 
 
 let isbn = "";
-let bibliography=[];
+let bibliography = [];
 
 
 fetchBtn.addEventListener('click', function () {
@@ -39,6 +41,7 @@ function fetchGoogleBookVolumeId(isbn) {
 
     })
     .catch(error => {
+      noBookFound.style.display="block";
       console.log(error);
       return;
     })
@@ -69,6 +72,8 @@ function fetchInfo(volumeId) {
 
 
 function visualise(bookInfo) {
+  //clean noBookFound
+  noBookFound.style.display="none";
   //clean container
   infoContainer.innerHTML = "";
 
@@ -159,16 +164,16 @@ function visualise(bookInfo) {
   }
 
   //create record object to pass to add to bibliography function
-  let recordObj={
+  let recordObj = {
     authorsString,
-     title,
-     publisher,
-     publishedDate,
-     isbn
+    title,
+    publisher,
+    publishedDate,
+    isbn
   }
-  
+
   //visualise button
-  addToBibliographyButton.style.display="block";
+  addToBibliographyButton.style.display = "block";
   addToBibliographyButton.addEventListener('click', function () {
     addToBibliography(recordObj);
   })
@@ -176,30 +181,30 @@ function visualise(bookInfo) {
   function addToBibliography(recordObj) {
     console.log(recordObj)
     //create record
-  let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
- 
+    let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
+
     //clear container
-    bibliographyContainer.innerHTML="";
+    bibliographyContainer.innerHTML = "";
     //add record
     bibliography.push(record);
-  
+
     //remove duplicate records
-    let unique=[];
-    bibliography.forEach(r=>{
-      if(!unique.includes(r)){
+    let unique = [];
+    bibliography.forEach(r => {
+      if (!unique.includes(r)) {
         unique.push(r)
       }
     })
 
     //sort records
-    let sorted=unique.sort(function(a,b){
+    let sorted = unique.sort(function (a, b) {
       return a.localeCompare(b)
     });
-    
-   sorted.forEach(r=>{
-       let recordP = document.createElement('p');
-    recordP.innerText = r;
-    bibliographyContainer.appendChild(recordP)
-    }) 
+
+    sorted.forEach(r => {
+      let recordP = document.createElement('p');
+      recordP.innerText = r;
+      bibliographyContainer.appendChild(recordP)
+    })
   }
 }
