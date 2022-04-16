@@ -220,7 +220,10 @@ function visualise(bookInfo) {
     })
 
     //find a way to remove repeating elements
+ 
     let uniqueElements = [];
+    // let uniqueElements = [];
+    
     bibliographyElements.forEach(r => {
       if (!uniqueElements.includes(r)) {
         uniqueElements.push(r)
