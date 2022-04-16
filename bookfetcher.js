@@ -7,10 +7,12 @@ let infoContainer = document.getElementById('info');
 let cover = document.getElementById('coverImg');
 let addToBibliographyButton = document.getElementById('addToBibliography');
 let bibliographyContainer = document.getElementById('bibliographyContainer');
+let italics=document.getElementById('italics');
 
 
 let isbn = "";
 let bibliography = [];
+let bibliographyElements=[];
 
 
 fetchBtn.addEventListener('click', function () {
@@ -179,7 +181,28 @@ function visualise(bookInfo) {
   })
 
   function addToBibliography(recordObj) {
-    console.log(recordObj)
+    console.log(recordObj);
+
+    //create italicized span
+    let italicizedSpan=document.createElement("SPAN");
+    
+    italicizedSpan.style.fontStyle="italic";
+    italicizedSpan.textContent=" "+recordObj.title;
+    console.log(italicizedSpan.innerText+ "ITALICS")
+
+    //create record p element
+    let recordP=document.createElement('p');
+    recordP.innerText=recordObj.authorsString;
+    recordP.appendChild(italicizedSpan);
+
+    let restOfRecord=document.createElement("span");
+    restOfRecord.innerText=`. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
+    recordP.appendChild(restOfRecord);
+    
+    bibliographyElements.push({sortWord:authorsString, htmle:recordP})
+    console.log(bibliographyElements)
+
+ 
     //create record
     let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
 
@@ -196,15 +219,34 @@ function visualise(bookInfo) {
       }
     })
 
+    //find a way to remove repeating elements
+    let uniqueElements = [];
+    bibliographyElements.forEach(r => {
+      if (!uniqueElements.includes(r)) {
+        uniqueElements.push(r)
+      }
+    })
+
+  
+
     //sort records
     let sorted = unique.sort(function (a, b) {
       return a.localeCompare(b)
+    });
+
+    let sortedElements = uniqueElements.sort(function (a, b) {
+      return a.sortWord.localeCompare(b.sortWord)
     });
 
     sorted.forEach(r => {
       let recordP = document.createElement('p');
       recordP.innerText = r;
       bibliographyContainer.appendChild(recordP)
+    })
+
+    sortedElements.forEach(r => {
+    console.log(r)
+     italics.appendChild(r.htmle)
     })
   }
 }

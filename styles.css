@@ -65,6 +65,11 @@ button{
     font-size: 14px;
 }
 
+span{
+    display: inline-block;
+    background-color: red;
+}
+
 .addToBibliography{
 display: none;
 align-self: flex-end;
