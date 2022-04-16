@@ -75,3 +75,28 @@ align-self: flex-end;
 font-size: 2rem;
 }
 
+.biblioLegend{  
+    display: inline-block;  
+    background-color: #c2dadd;  
+    border: 1px solid lightgrey;    
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    padding: 1rem; 
+    margin-bottom: 0;
+}
+
+#italics{
+    background-color: #c2dadd;  
+    border: 1px solid lightgrey;    
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.exportButton{
+float: inline-end;
+font-size: 14px;
+border: 1px solid lightgrey;  
+margin-top: 0.5rem;
+}
