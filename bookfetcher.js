@@ -7,7 +7,6 @@ let infoContainer = document.getElementById('info');
 let cover = document.getElementById('coverImg');
 let addToBibliographyButton = document.getElementById('addToBibliography');
 let bibliographyContainer = document.getElementById('bibliographyContainer');
-let italics=document.getElementById('italics');
 let exportButton=document.getElementById("export")
 
 
@@ -188,70 +187,56 @@ function visualise(bookInfo) {
     let italicizedSpan=document.createElement("SPAN");
     
     italicizedSpan.style.fontStyle="italic";
-    italicizedSpan.textContent=" "+recordObj.title;
-    console.log(italicizedSpan.innerText+ "ITALICS")
-
+    italicizedSpan.textContent=`${recordObj.title}`;
+  
     //create record p element
     let recordP=document.createElement('p');
-    recordP.innerText=recordObj.authorsString;
+    recordP.innerText=recordObj.authorsString+" ";
     recordP.appendChild(italicizedSpan);
 
     let restOfRecord=document.createElement("span");
     restOfRecord.innerText=`. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
     recordP.appendChild(restOfRecord);
+    console.log(recordP.innerText)
+   
+
+    let elementExists=false;
+    bibliographyElements.forEach(e=>{
+      console.log('element:'+e.innerText);
+      console.log('checking', recordP.innerText);
+     if (e.innerText==recordP.innerText){
+       elementExists=true;
+     }
+     console.log(elementExists)
+    })
+
+ 
     
-    bibliographyElements.push({sortWord:authorsString, htmle:recordP})
+    if (!elementExists){
+      bibliographyElements.push(recordP);
+    
+    }
+
+    //sort elements
+    let sorted=bibliographyElements.sort(function (a, b){
+      return a.innerText.localeCompare(b.innerText)
+    })
+
+    console.log(sorted)
+    // //clear container
+    bibliographyContainer.innerHTML = "";
+
+    sorted.forEach(e=>{
+      bibliographyContainer.appendChild(e)
+  
+    })
+
+    
+
+ 
     console.log(bibliographyElements)
 
  
-    //create record
-    let record = `${recordObj.authorsString} ${recordObj.title}. ${recordObj.publisher}, ${recordObj.publishedDate}. ISBN ${recordObj.isbn}`;
-
-    //clear container
-    bibliographyContainer.innerHTML = "";
-    //add record
-    bibliography.push(record);
-
-    //remove duplicate records
-    let unique = [];
-    bibliography.forEach(r => {
-      if (!unique.includes(r)) {
-        unique.push(r)
-      }
-    })
-
-    //find a way to remove repeating elements
- 
-    let uniqueElements = [];
-    // let uniqueElements = [];
-    
-    bibliographyElements.forEach(r => {
-      if (!uniqueElements.includes(r)) {
-        uniqueElements.push(r)
-      }
-    })
-
-  
-
-    //sort records
-    let sorted = unique.sort(function (a, b) {
-      return a.localeCompare(b)
-    });
-
-    let sortedElements = uniqueElements.sort(function (a, b) {
-      return a.sortWord.localeCompare(b.sortWord)
-    });
-
-    sorted.forEach(r => {
-      let recordP = document.createElement('p');
-      recordP.innerText = r;
-      bibliographyContainer.appendChild(recordP)
-    })
-
-    sortedElements.forEach(r => {
-    console.log(r)
-     italics.appendChild(r.htmle)
-    })
   }
 }
 
